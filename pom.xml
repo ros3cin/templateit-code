@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<name>templateIt</name>
+	<groupId>org.templateit</groupId>
+	<artifactId>templateit</artifactId>
+	<version>1.0-beta4</version>
+	<description>Excel based template processor</description>
+	<url>http://templateit.sourceforge.net</url>
+	
+	<licenses>
+	  <license>
+	    <name>Apache License, Version 2.0</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+	    <distribution>repo</distribution>
+	  </license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<id>dq</id>
+			<name>Dmitriy Kumshayev</name>
+			<email>dq@mail.com</email>
+		</developer>
+	</developers>
+	<properties>
+		<java.source.version>1.5</java.source.version>
+	</properties>
+	<scm>
+		<connection>scm:svn:https://templateit.svn.sourceforge.net/svnroot/templateit/trunk</connection>
+		<developerConnection>scm:svn:https://templateit.svn.sourceforge.net/svnroot/templateit/trunk</developerConnection>
+	</scm>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.source.version}</source>
+					<target>${java.source.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin
+				</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/_svn/**</exclude>
+						<exclude>**/.svn/**</exclude>
+						<exclude>**/_svn</exclude>
+						<exclude>**/.svn</exclude>
+						<exclude>**.xls</exclude>
+						<exclude>**.csv</exclude>
+						<exclude>**.properties</exclude>
+					</excludes>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<svn-revision>${buildNumber}</svn-revision>
+							<svn-timestamp>${timestamp}</svn-timestamp>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin
+				</artifactId>
+				<version>1.0-beta-2</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>true</doUpdate>
+					<timestampFormat>{0,date,yyyyMMddHHmmss}</timestampFormat>
+					<items>
+						<item>timestamp</item>
+					</items>
+					<revisionOnScmFailure>unknown</revisionOnScmFailure>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<repositories>
+		<repository>
+			<id>templateIt</id>
+			<name>templateIt</name>
+			<url>http://templateit.sourceforge.net/m2repo/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.2-FINAL</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+	</dependencies>
+	
+	<distributionManagement>
+		<repository>
+			<id>templateit.sourceforge.net</id>
+			<url>sftp://web.sourceforge.net/home/groups/t/te/templateit/htdocs/m2repo</url>
+		</repository>
+		<site>
+			<id>templateit.sourceforge.net</id>
+			<url>sftp://web.sourceforge.net/home/groups/t/te/templateit/htdocs</url>
+		</site>
+	</distributionManagement>
+	
+</project>

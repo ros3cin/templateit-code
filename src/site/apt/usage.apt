@@ -1,0 +1,208 @@
+Template workbook.
+
+	Worksheets of a Template Workbook define templates. Each template is a rectangular
+	area of cells associated with a name and  optional parameters. 
+	Each template area is marked with special comments. 
+	      
+    The top left cell of the area should have a comment in the following format:\
+      <<@template_begin(templateName,parameterName1, parameterName2,...)>>\
+        or\
+      <<@tbegin(templateName,parameterName1, parameterName2,...)>>
+      	
+	where
+
+	[templateName] - name of the defined rectangular region (starts with a letter followed by
+	letters, digits and underscore characters).
+          
+    [parameterName\<i\>] - name of the i-th parameter of the template. Template parameter
+         is a cell of the template rectangle.    
+           
+     []
+     The bottom right cell of the template should have the following annotation in the cell comment:\
+      <<@template_end>>\
+      or\
+      <<@tend>>
+          
+       
+      Template Workbook defines presentation for the document you are going to generate
+      using <<templateIt>>.
+      
+      A template workbook may consist of multiple worksheets.
+      
+      Below is an example of a worksheet with two templates defined. The first template 
+      named <header> is defined in the area <A2:C2>.  It has no parameters defined.
+      The second template is named <item>. <Item> is defined in the area <A3:C3> and it 
+      has three paramaters: <iname> in <A3>, <price> in <B3> and <date> in <C3>.
+      
+[images/PriceListTemplate.jpg] 
+       
+      
+API call
+
+---
+ 
+File csvFile = new File("PriceList.csv");
+File templateFile = new File("PriceListTemplate.xls");
+File outputXlsFile = new File("PriceList.xls");
+Iterator<String[]> iterator = new DelimitedFileReader(csvFile, "\t");
+TemplateProcessor tp = new TemplateProcessor(templateFile);
+  
+// Generate output XLS file
+tp.process(iterator, outputXlsFile);
+
+// Generate PDF file from the XLS file     
+File pdfFile = new File("PriceList.pdf");
+OutputStream pdfStream = new FileOutputStream(pdfFile);
+new PdfWriter(new FileInputStream(outputXlsFile)).writePdf(pdfStream);			
+...
+---
+
+Template at work
+
+	Now, when we have a template and know how to define a template workbook and
+	how to call the API, let us see how the result can be produced.
+	Let us create a tab  separated file PriceList.csv:
+
+---
+#sheet	PriceList	PriceList as of 20-Jan-2009 
+header
+item	Item 1	10	1/12/2009
+item	Item 2	15	1/13/2009
+item	Item 3	20	1/14/2009
+#end
+---
+
+	This file contains data or better say a stream of commands, driving the 
+	template processor to produce the output result.
+	
+	The first line tells to the template processor to use sheet <PriceList> 
+	from the template workbook and to create <PriceList as of 20-Jan-2009> sheet
+	in the output document. <PriceList as of 20-Jan-2009> becomes current output 
+	sheet. all subsequent commands till <#end> command are interpreted in the 
+	context of the current sheet. 
+	
+	The second line contains name of the <header> template region. This region 
+	will be copied from the template workbook to the end of the current sheet.
+	
+	The next three commands have the same meaning as the second one. They add
+	three times template named <item> to the end of the current sheet. 
+	Since <item> template as it was defined, has three parameters, the three 
+	values need to be provided with each of these three lines. The values will
+	substitute values in the corresponding template cells.
+	
+	Finally there is <#end> command which tells the processor to stop generating
+	current sheet.
+	  
+	Let us see at the result:
+	
+[images/PriceList.jpg] 
+
+Dynamic template
+
+	Templates are rectangular regions of Excel's cells which are normally created 
+	in advance in excel file. At runtime excel file generation is controlled
+	via limited stream of commands and data. Meanwhile in some applications
+	there is a requirement on styles but decision about actual number of cells and 
+	more specifically columns needs to be postponed till the runtime. A number of 
+	commands is designed to make this possible.
+	<<TemplateIt>> supports two different ways for dynamic template creation.
+	
+	The first approach is to declare different <styles>, represented by cells in
+	the template xls-file supplied with a special @style-comment and then at 
+	runtime define a template useing #template command.
+	
+	@style comment has the following syntax:\
+	\
+	  <<@style(name)>>\
+        or\
+      <<@style(name,true)>>
+    
+    where 
+    
+      name - a string defining a name associated with the given style
+  
+      true - is an optional argument which defines a value placeholder or
+      parameter. When template region is created in the output file,
+      the template processor expects a value to be provided for each 
+      template cell associated with a parameter.    
+
+    Once all necessary styles are defined, a #template command in the input 
+    stream to <dynamically> define a template out of these styles.
+    Here is the syntax of the command:
+
+      <<#template \<Template Name\>  \<number of rows\> \<list of style names\>>>
+     
+    This command defines a rectangular region of cells. The region has
+    specified number of rows. Number of styles should be a multiple of
+    number of rows so that number of cells in a row equals exactly 
+    to number of styles in the template divided by number of rows.
+    
+    For example:
+    
+      <<#template T 2 A B C A B C>>
+      
+    defines a template named T which has two rows and three columns 
+    (six cells altogether). A B C A B C define styles for each of the cells
+    going from left to right and then upside down.
+    
+    Once such dynamic template defined, it can be used the same way as a regular
+    static template. If some of the styled defined with a parameter flag set 
+    to true, the data value has to be provided when template is generated.    	 	 
+    For example, if, say, style A defined as @style(A,true) and B and C without 
+    parameter flag, then the following command will generate a rectangle of 
+    two rows and three columns so that cell (1,1) will contain value 100 and 
+    cell (2,1) value 200:
+    
+      <<T 100 200>>
+
+	
+Debugging templates
+
+	Use log4j settings to control output from WorkbookParser, TemplateProcessor and
+	PdfWriter.
+	
+	For example:
+	
+---	  
+log4j.logger.org.templateit=TRACE
+log4j.logger.org.templateit.PdfWriter=INFO
+---
+
+Adding <<templateIt>> to your pom.xml as dependency
+
+---
+   <repositories>
+      <repository>
+         <id>templateIt</id>
+         <name>templateIt</name>
+         <url>http://templateit.sourceforge.net/m2repo/</url>
+      </repository>
+   </repositories>
+
+   <dependencies>
+    . . .
+      <dependency>
+         <groupId>org.templateIt</groupId>
+         <artifactId>templateIt</artifactId>
+         <version>1.0-beta3</version>
+      </dependency>
+    ....
+---
+
+Examples
+
+	Examples can be found in the project at svn repository 
+	https://templateit.svn.sourceforge.net/svnroot/templateit/trunk/ 
+	under folder src/test/resources.
+	
+	Class <<org.templateit.TemplateIt>> containing method <<main>> demonstrates 
+	how to call TemplateProcessor and can be used as a simple utility
+	to generate the examples.
+	
+	The easiest way to try examples is to checkout the project from SVN in Eclipse. 
+	To do that you can use File -> Import -> SVN -> Checkout Project from SVN
+	from location https://templateit.svn.sourceforge.net/svnroot/templateit/trunk/ .
+	The just build the project and run <<org.templateit.TemplateIt>> with the appropriate 
+	arguments.
+	
+	

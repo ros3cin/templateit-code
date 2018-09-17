@@ -1,0 +1,18 @@
+Introduction
+
+	<<templateIt>> is an Excel based template processor written in Java. 
+	It automatically generates documents in Microsoft Excel and PDF formats.
+
+	Templates are designed directly in Microsoft Excel workbook document
+	which may contain Sheets, Formulas, Cell Formatting and even some modules 
+	with VBA code. The template workbook will look very much as you want the 
+	output Excel document look like with the only difference that instead 
+	of the "real" data it would have placeholders for it.  
+	The data to populate them comes separately as an input stream feeding 
+	the template processor. The processor driven by such stream of data
+	copies and replicates elements of the template workbook to the output 
+	document replacing the placehoders (or template parameters) with values 
+	and keeping formatting and calculations as they were designed in the template.
+	Data and document presentation are nicely separated so that the 
+	same template can be reused with different data producing many documents 
+	of a kind.  

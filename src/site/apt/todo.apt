@@ -1,0 +1,16 @@
+templateIt-1.0-beta3
+ 
+ *enable images in the templates - depends on POI
+ 
+ *enhance formula recalculation logic
+ 
+ *improve warnings and error messages
+ 
+ *document dynamic templates (#select,#template) and styles(@style)
+ 
+ *support colspans in PDF generator
+ 
+ *package as standalone program to run templates from CSC files
+ 
+ *create a standalone program which connects to DB 
+ 

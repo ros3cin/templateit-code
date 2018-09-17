@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="templateIt">
+
+    <bannerLeft>
+    	<name>templateIt</name>
+    	<src>images/templateIt.png</src>
+        <href>http://templateit.sourceforge.net/</href>
+    </bannerLeft>
+    
+    <!-- bannerLeft>
+    	<name>Nominate</name>
+        <src>http://sourceforge.net/images/cca/cca_nominate.png</src>
+        <href>http://sourceforge.net/community/cca09/nominate/?project_name=templateIt&amp;project_url=http://templateit.sourceforge.net/</href>
+	</bannerLeft-->
+	
+    <bannerRight>
+    	<name>SourceForge.net</name>
+        <src>http://sflogo.sourceforge.net/sflogo.php?group_id=250615&amp;type=3</src>
+        <href>http://sourceforge.net/projects/templateit</href>
+	</bannerRight>
+	
+	<body>
+		<links>
+			<item name="Apache POI" href="http://poi.apache.org/" />
+			<item name="iText" href="http://www.lowagie.com/iText/" />
+		</links>
+
+		<menu name="templateIt">
+			<item name="Introduction" href="index.html"/>
+			<item name="Usage" href="usage.html"/>
+			<item name="Examples">
+				<item name="Sales Receipt" href="SalesReceipt.html"/>
+			</item>
+			<item name="Download" href="https://sourceforge.net/project/showfiles.php?group_id=250615"/>
+			<item name="Release Notes" href="release-notes.html" />
+			<item name="ToDo" href="todo.html"/>
+		</menu>
+		
+		<menu ref="reports"/>
+	</body>
+	   
+</project>
