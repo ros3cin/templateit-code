@@ -48,6 +48,9 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
+import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.collections.impl.map.mutable.UnifiedMap;
+
 public class PdfWriter
 {
 	private static final Logger logger = Logger.getLogger(PdfWriter.class);
@@ -366,7 +369,7 @@ public class PdfWriter
 		
 		public Map<Integer, Map<Integer, CellRangeAddress>>  collectMergeData()
 		{
-			Map<Integer,Map<Integer, CellRangeAddress>> mergeRegions = new HashMap<Integer, Map<Integer,CellRangeAddress>>();
+			Map<Integer,Map<Integer, CellRangeAddress>> mergeRegions = new UnifiedMap<Integer, Map<Integer,CellRangeAddress>>();
 			
 			for (int j = 0; j < sheet.getNumMergedRegions(); j++)
 			{
@@ -377,7 +380,7 @@ public class PdfWriter
 				Map<Integer, CellRangeAddress> rowMergeRegions = mergeRegions.get(r);
 				if( rowMergeRegions==null)
 				{
-					rowMergeRegions = new HashMap<Integer, CellRangeAddress>();
+					rowMergeRegions = new HashedMap<Integer, CellRangeAddress>();
 					mergeRegions.put(r, rowMergeRegions);
 				}
 				rowMergeRegions.put(c, merge);

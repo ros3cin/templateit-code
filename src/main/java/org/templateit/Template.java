@@ -18,21 +18,24 @@ package org.templateit;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 public abstract class Template
 {
 	private static final Logger logger = Logger.getLogger(Template.class);
 	protected final String name;
 	protected final HSSFSheet sheet;
-	protected final List<Parameter> parameters = new LinkedList<Parameter>();
-	private final Map<String,Parameter> parametersByName = new HashMap<String, Parameter>();
-	private final Map<Integer,Map<Integer,Parameter>> paramsByRowCol = new HashMap<Integer,Map<Integer,Parameter>>();    
+	protected final List<Parameter> parameters = new ArrayList<Parameter>();
+	private final Map<String,Parameter> parametersByName = new HashedMap<String, Parameter>();
+	private final Map<Integer,Map<Integer,Parameter>> paramsByRowCol = new HashedMap<Integer,Map<Integer,Parameter>>();    
 
 	public Template(String name,HSSFSheet sheet)
 	{
@@ -99,7 +102,7 @@ public abstract class Template
 			Map<Integer, Parameter> paramsByCol = paramsByRowCol.get(relRow);
 			if (paramsByCol == null)
 			{
-				paramsByCol = new HashMap<Integer, Parameter>();
+				paramsByCol = new HashedMap<Integer, Parameter>();
 				paramsByRowCol.put(relRow, paramsByCol);
 			}
 			paramsByCol.put(relCol, param);

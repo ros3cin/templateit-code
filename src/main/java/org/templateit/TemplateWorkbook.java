@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 /**
  * This class encapsulates a map of {@link TemplateSheet} gathered 
@@ -29,7 +31,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
  */
 final class TemplateWorkbook
 {
-	private Map<String, TemplateSheet> sheets = new HashMap<String, TemplateSheet>();
+	private Map<String, TemplateSheet> sheets = new HashedMap<String, TemplateSheet>();
 
 	public TemplateSheet getTemplateSheet(String sheetName)
 	{

@@ -25,6 +25,8 @@ import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 
 /**
  * Represents a rectangular template area in the template workbook.
@@ -70,7 +72,7 @@ class StaticTemplate extends Template
 				absSelectList.add(absoluteColumn(c));
 			}
 			
-			parameterIndexMap = new HashMap<Integer, Map<Integer, Integer>>();
+			parameterIndexMap = new HashedMap<Integer, Map<Integer, Integer>>();
 			int idx = 1;
 			int h = height();
 			int w = width();
@@ -85,7 +87,7 @@ class StaticTemplate extends Template
 						Map<Integer, Integer> rowIndexMap = parameterIndexMap.get(r);
 						if( rowIndexMap==null)
 						{
-							rowIndexMap = new HashMap<Integer, Integer>();
+							rowIndexMap = new HashedMap<Integer, Integer>();
 							parameterIndexMap.put(r, rowIndexMap);
 						}
 						rowIndexMap.put(c, idx++);

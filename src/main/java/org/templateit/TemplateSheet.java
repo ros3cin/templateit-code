@@ -19,18 +19,19 @@ package org.templateit;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
+import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 
 class TemplateSheet
 {
 	private final String sheetName;
 	private final HSSFSheet sheet;
-	private final Map<String,StaticTemplate> templateMap = new HashMap<String,StaticTemplate>();
-	private final Map<String,DynamicTemplate> dynamicTemplateMap = new HashMap<String,DynamicTemplate>();
+	private final Map<String,StaticTemplate> templateMap = new HashedMap<String,StaticTemplate>();
+	private final Map<String,DynamicTemplate> dynamicTemplateMap = new HashedMap<String,DynamicTemplate>();
 	private int lastColumn = 0;
 	private int firstColumn = 0;
-	private final Map<String,NamedStyle> stylesMap = new HashMap<String,NamedStyle>();
+	private final Map<String,NamedStyle> stylesMap = new HashedMap<String,NamedStyle>();
 	
 	public TemplateSheet(String sheetName,HSSFSheet sheet)
 	{

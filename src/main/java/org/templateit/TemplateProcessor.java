@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -95,7 +96,7 @@ public class TemplateProcessor
 		try
 		{
 			bos = toByteArrayOutputStream(templateWorkbookStream);
-			protectedSheetNames = new HashSet<String>();
+			protectedSheetNames = new LinkedHashSet<String>();
 		}
 		finally
 		{
