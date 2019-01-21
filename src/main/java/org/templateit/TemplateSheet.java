@@ -13,133 +13,113 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.templateit;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 
-class TemplateSheet
-{
-	private final String sheetName;
-	private final HSSFSheet sheet;
-	private final Map<String,StaticTemplate> templateMap = new HashMap<String,StaticTemplate>();
-	private final Map<String,DynamicTemplate> dynamicTemplateMap = new HashMap<String,DynamicTemplate>();
-	private int lastColumn = 0;
-	private int firstColumn = 0;
-	private final Map<String,NamedStyle> stylesMap = new HashMap<String,NamedStyle>();
-	
-	public TemplateSheet(String sheetName,HSSFSheet sheet)
-	{
-		this.sheetName=sheetName;
-		this.sheet = sheet;
-	}
-	
-	public Template getTemplate(String tName)
-	{
-		Template template = dynamicTemplateMap.get(tName);
-		if( template==null)
-		{
-			template = templateMap.get(tName);
-		}
-		return template;
-	}
-	
-	public StaticTemplate getStaticTemplate(String tName)
-	{
-		return templateMap.get(tName);
-	}
+class TemplateSheet {
 
-	public Collection<StaticTemplate> templates()
-	{
-		return templateMap.values();
-	}
-	
-	public StaticTemplate createTemplate(int r, int c, String[] names)
-	{
-		String tName = names[0];
-		StaticTemplate t = this.getStaticTemplate(tName);
-		if (t == null)
-		{
-			t = new StaticTemplate(tName,sheet);
-			if( names.length>1 )
-			{
-				Parameter[] parameters = new Parameter[names.length-1];
-				for (int i = 1; i < names.length; i++)
-				{
-					Parameter parameter = new Parameter();
-					parameter.setName(names[i]);
-					parameter.setIndex(i);
-					parameters[i-1] = parameter;
-				}
-				t.setParameters(parameters);
-			}
+    private final String sheetName;
 
-			Reference start = new Reference(r, c);
-			t.setStartReference(start);
-			this.addTemplate(t);
-		}
-		return t;
-	}
+    private final HSSFSheet sheet;
 
-	public String getSheetName()
-	{
-		return sheetName;
-	}
+    private final Map<String, StaticTemplate> templateMap = new java.util.LinkedHashMap<String, StaticTemplate>();
 
-	public int getFirstColumn() 
-	{
-		return firstColumn;
-	}
+    private final Map<String, DynamicTemplate> dynamicTemplateMap = new java.util.LinkedHashMap<String, DynamicTemplate>();
 
-	public int getLastColumn()
-	{
-		return lastColumn;
-	}
+    private int lastColumn = 0;
 
-	public void setLastColumn(int lastColumn)
-	{
-		this.lastColumn = lastColumn;
-	}
+    private int firstColumn = 0;
 
-	public HSSFSheet sheet()
-	{
-		return sheet;
-	}
+    private final Map<String, NamedStyle> stylesMap = new java.util.LinkedHashMap<String, NamedStyle>();
 
-	private StaticTemplate addTemplate(StaticTemplate t)
-	{
-		if( templateMap.size()==0)
-		{
-			firstColumn = t.start().column();
-		}
-		else
-		{
-			firstColumn = Math.min(firstColumn, t.start().column());
-		}
-		return templateMap.put(t.getName(),t);
-	}
+    public TemplateSheet(String sheetName, HSSFSheet sheet) {
+        this.sheetName = sheetName;
+        this.sheet = sheet;
+    }
 
-	public NamedStyle addStyle(NamedStyle style)
-	{
-		if( style!=null )
-		{
-			return stylesMap.put(style.getName(), style);
-		}	
-		return null;
-	}
+    public Template getTemplate(String tName) {
+        Template template = dynamicTemplateMap.get(tName);
+        if (template == null) {
+            template = templateMap.get(tName);
+        }
+        return template;
+    }
 
-	public NamedStyle getStyle(String styleName)
-	{
-		return stylesMap.get(styleName);
-	}
+    public StaticTemplate getStaticTemplate(String tName) {
+        return templateMap.get(tName);
+    }
 
-	public void addDynamicTemplate(DynamicTemplate dynamicTemplate)
-	{
-		dynamicTemplateMap.put(dynamicTemplate.getName(), dynamicTemplate);
-	}
+    public Collection<StaticTemplate> templates() {
+        return templateMap.values();
+    }
 
+    public StaticTemplate createTemplate(int r, int c, String[] names) {
+        String tName = names[0];
+        StaticTemplate t = this.getStaticTemplate(tName);
+        if (t == null) {
+            t = new StaticTemplate(tName, sheet);
+            if (names.length > 1) {
+                Parameter[] parameters = new Parameter[names.length - 1];
+                for (int i = 1; i < names.length; i++) {
+                    Parameter parameter = new Parameter();
+                    parameter.setName(names[i]);
+                    parameter.setIndex(i);
+                    parameters[i - 1] = parameter;
+                }
+                t.setParameters(parameters);
+            }
+            Reference start = new Reference(r, c);
+            t.setStartReference(start);
+            this.addTemplate(t);
+        }
+        return t;
+    }
+
+    public String getSheetName() {
+        return sheetName;
+    }
+
+    public int getFirstColumn() {
+        return firstColumn;
+    }
+
+    public int getLastColumn() {
+        return lastColumn;
+    }
+
+    public void setLastColumn(int lastColumn) {
+        this.lastColumn = lastColumn;
+    }
+
+    public HSSFSheet sheet() {
+        return sheet;
+    }
+
+    private StaticTemplate addTemplate(StaticTemplate t) {
+        if (templateMap.size() == 0) {
+            firstColumn = t.start().column();
+        } else {
+            firstColumn = Math.min(firstColumn, t.start().column());
+        }
+        return templateMap.put(t.getName(), t);
+    }
+
+    public NamedStyle addStyle(NamedStyle style) {
+        if (style != null) {
+            return stylesMap.put(style.getName(), style);
+        }
+        return null;
+    }
+
+    public NamedStyle getStyle(String styleName) {
+        return stylesMap.get(styleName);
+    }
+
+    public void addDynamicTemplate(DynamicTemplate dynamicTemplate) {
+        dynamicTemplateMap.put(dynamicTemplate.getName(), dynamicTemplate);
+    }
 }
